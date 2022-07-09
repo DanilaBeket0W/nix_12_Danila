@@ -1,0 +1,1 @@
+2022-07-09 14:10:47,971 DEBUG ua.cars.service.CarService [main] Created auto dff5a58c-c9ba-4f54-b353-609d15b331ac

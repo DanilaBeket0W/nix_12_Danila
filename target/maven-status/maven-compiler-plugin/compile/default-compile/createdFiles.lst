@@ -1,0 +1,6 @@
+ua/cars/entity/Manufacturer.class
+ua/cars/repository/CarsDataBase.class
+ua/cars/CarsMain.class
+ua/cars/entity/CarEntity.class
+ua/cars/entity/BaseCar.class
+ua/cars/UIrun.class
