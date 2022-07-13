@@ -1,6 +1,5 @@
 package ua.cars.repository;
 
-import ua.cars.entity.Car;
 import ua.cars.entity.Manufacturer;
 import ua.cars.entity.Moto;
 
@@ -10,14 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MotoRepository {
-    private final List<Moto> Motos;
+    private final List<Moto> motos;
 
     public MotoRepository() {
-        Motos = new LinkedList<>();
+        motos = new LinkedList<>();
     }
 
     public Moto getById(String id) {
-        for (Moto atv : Motos) {
+        for (Moto atv : motos) {
             if (atv.getId().equals(id)) {
                 return atv;
             }
@@ -27,12 +26,15 @@ public class MotoRepository {
 
 
     public List<Moto> getAll() {
-        return Motos;
+        return motos;
     }
 
 
     public boolean create(Moto atv) {
-        Motos.add(atv);
+        if (atv == null) {
+            throw new IllegalArgumentException("ATV can not be null");
+        }
+        motos.add(atv);
         return true;
     }
 
@@ -53,7 +55,7 @@ public class MotoRepository {
 
 
     public boolean delete(String id) {
-        final Iterator<Moto> iterator = Motos.iterator();
+        final Iterator<Moto> iterator = motos.iterator();
         while (iterator.hasNext()) {
             final Moto atv = iterator.next();
             if (atv.getId().equals(id)) {
@@ -62,13 +64,6 @@ public class MotoRepository {
             }
         }
         return false;
-    }
-
-    private static void copy(final Moto from, final Moto to) {
-        to.setManufacturer(from.getManufacturer());
-        to.setModel(from.getModel());
-        to.setSitsNumber(from.getSitsNumber());
-        to.setPrice(from.getPrice());
     }
 
 }

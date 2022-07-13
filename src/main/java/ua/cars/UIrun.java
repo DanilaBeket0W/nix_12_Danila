@@ -4,6 +4,9 @@ package ua.cars;
 import ua.cars.entity.Boat;
 import ua.cars.entity.Car;
 import ua.cars.entity.Moto;
+import ua.cars.repository.BoatRepository;
+import ua.cars.repository.CarRepository;
+import ua.cars.repository.MotoRepository;
 import ua.cars.service.BoatService;
 import ua.cars.service.CarService;
 import ua.cars.service.MotoService;
@@ -14,9 +17,9 @@ import java.io.InputStreamReader;
 
 
 public class UIrun {
-    private static final CarService carService = new CarService();
-    private static final MotoService motoService = new MotoService();
-    private static final BoatService boatService = new BoatService();
+    private static final CarService carService = new CarService(new CarRepository());
+    private static final MotoService motoService = new MotoService(new MotoRepository());
+    private static final BoatService boatService = new BoatService(new BoatRepository());
     private static final IOFunctions IO_FUNCTIONS = new IOFunctions();
     public static void start() {
         System.out.println("CARS CRUD");
@@ -30,8 +33,9 @@ public class UIrun {
         }
     }
 
+
     private static void navigation(BufferedReader reader) throws IOException {
-        System.out.println("Выбери что хочешь сделать:\n1 - добавить транспорт\n2 - обновить транспорт\n3 - удалить транспорт\n4 - найти транспорт по номеру id\n5 - посмотреть весь транспорт\n0 - для выхода\n");
+        System.out.println("Choose an action:\n1 - add transport\n2 - update transport\n3 - delete transport\n4 - find transport by id\n5 - show all transport\n0 - to exit\n");
         String line = reader.readLine();
         switch (line) {
             case "0" -> System.exit(0);
@@ -40,18 +44,18 @@ public class UIrun {
             case "3" -> delete(reader);
             case "4" -> findById(reader);
             case "5" -> findALL();
-            default -> System.out.println("Выбери вариант 0-5");
+            default -> System.out.println("Choose 0-5");
         }
     }
     private static void createNavigation(BufferedReader reader) throws IOException {
-        System.out.println("Выбери какой тип транспорта хочешь добавить:\n1 - auto\n2 - atv\n3 - boat\n0 - для выхода в главное меню\n");
+        System.out.println("Choose type of transport:\n1 - auto\n2 - atv\n3 - boat\n0 - back to meny\n");
         String line = reader.readLine();
         switch (line) {
             case "0" -> navigation(reader);
             case "1" -> createAuto(reader);
             case "2" -> createMoto(reader);
             case "3" -> createBoat(reader);
-            default -> System.out.println("Выбери вариант 0-3");
+            default -> System.out.println("Choose 0-3");
         }
     }
     private static void createAuto(BufferedReader reader) throws IOException {
@@ -67,7 +71,7 @@ public class UIrun {
         boatService.create(boat);
     }
     private static void update(BufferedReader reader) throws IOException {
-        System.out.println("\nВведи id транспорта которого хочешь обновить:");
+        System.out.println("\nInput id to update please:");
         String id = reader.readLine();
         Car car = carService.findByid(id);
         if(car != null){
@@ -84,35 +88,39 @@ public class UIrun {
             Boat updatedBoat = IO_FUNCTIONS.updateBoatInput(reader, boat.getId());
             boatService.update(id,updatedBoat.getModel(),updatedBoat.getManufacturer(),updatedBoat.getPrice(),updatedBoat.getCubicCapacity());
         }
-        System.out.println("\nТранспорт с введеным id обновлен.");
+        System.out.println("\nTransport with this id updated.");
     }
     private static void delete(BufferedReader reader) throws IOException {
-        System.out.println("\nВведи id транспорта которого хочешь удалить:");
+        System.out.println("\nInput id to delete please:");
         String id = reader.readLine();
         carService.delete(id);
         motoService.delete(id);
         boatService.delete(id);
-        System.out.println("\nТранспорт с введеным id удален.");
+        System.out.println("\nTransport with this id deleted.");
     }
     private static void findById(BufferedReader reader) throws IOException {
-        System.out.println("\nведи id транспорта которого хочешь найти:");
+        System.out.println("\nInput id to search please:");
         String id = reader.readLine();
         Car car = carService.findByid(id);
-        if(car != null)IO_FUNCTIONS.carOutput(car);
+        if(car != null){
+            System.out.println(car);}
         Moto atv = motoService.findByid(id);
-        if (atv != null)IO_FUNCTIONS.motoOutput(atv);
+        if (atv != null){
+            System.out.println(atv);}
         Boat boat = boatService.findByid(id);
-        if (boat != null)IO_FUNCTIONS.boatOutput(boat);
+        if (boat != null){
+            System.out.println(boat);}
     }
     private static void findALL(){
         for (Car auto : carService.findALL()) {
-            IO_FUNCTIONS.carOutput(auto);
+            System.out.println(auto);
         }
         for (Moto atv : motoService.findALL()) {
-            IO_FUNCTIONS.motoOutput(atv);
+            System.out.println(atv);
         }
         for (Boat boat : boatService.findALL()) {
-            IO_FUNCTIONS.boatOutput(boat);
+            System.out.println(boat);
         }
     }
+
 }

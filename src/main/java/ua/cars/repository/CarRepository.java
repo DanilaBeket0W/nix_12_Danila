@@ -9,15 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CarRepository {
-    private final List<Car> Cars;
+    private final List<Car> cars;
 
     public CarRepository() {
-        Cars = new LinkedList<>();
+        cars = new LinkedList<>();
     }
 
 
     public Car getById(String id) {
-        for (Car auto : Cars) {
+        for (Car auto : cars) {
             if (auto.getId().equals(id)) {
                 return auto;
             }
@@ -27,12 +27,15 @@ public class CarRepository {
 
 
     public List<Car> getAll() {
-        return Cars;
+        return cars;
     }
 
 
     public boolean create(Car auto) {
-        Cars.add(auto);
+        if (auto == null) {
+            throw new IllegalArgumentException("Auto can not be null");
+        }
+        cars.add(auto);
         return true;
     }
 
@@ -57,7 +60,7 @@ public boolean update(String id, String model, Manufacturer manufacturer, BigDec
 }
 
     public boolean delete(String id) {
-        final Iterator<Car> iterator = Cars.iterator();
+        final Iterator<Car> iterator = cars.iterator();
         while (iterator.hasNext()) {
             final Car auto = iterator.next();
             if (auto.getId().equals(id)) {
@@ -66,13 +69,6 @@ public boolean update(String id, String model, Manufacturer manufacturer, BigDec
             }
         }
         return false;
-    }
-
-    private static void copy(final Car from, final Car to) {
-        to.setManufacturer(from.getManufacturer());
-        to.setModel(from.getModel());
-        to.setBodyType(from.getBodyType());
-        to.setPrice(from.getPrice());
     }
 
 }
