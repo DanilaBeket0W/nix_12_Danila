@@ -1,12 +1,11 @@
 package ua.cars.repository;
 
+import ua.cars.entity.Car;
 import ua.cars.entity.Manufacturer;
 import ua.cars.entity.Moto;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class MotoRepository {
     private final List<Moto> motos;
@@ -15,39 +14,47 @@ public class MotoRepository {
         motos = new LinkedList<>();
     }
 
-    public Moto getById(String id) {
+    public Optional<Moto> findById(String id) {
         for (Moto atv : motos) {
             if (atv.getId().equals(id)) {
-                return atv;
+                return Optional.of(atv);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
+    public Optional<Moto> findByModel (String model){
+        for (Moto atv : motos) {
+            if (atv.getModel().equals(model)) {
+                return Optional.of(atv);
+            }
+        }
+        return Optional.empty();
+    }
 
     public List<Moto> getAll() {
         return motos;
     }
 
 
-    public boolean create(Moto atv) {
+    public Optional<Moto> create(Moto atv) {
         if (atv == null) {
             throw new IllegalArgumentException("ATV can not be null");
         }
         motos.add(atv);
-        return true;
+        return Optional.of(atv);
     }
 
 
     public boolean update(String id, String model, Manufacturer manufacturer, BigDecimal price, int sitsNumber) {
-        final Moto founded = getById(id);
-        if (founded != null) {
-            founded.setModel(model);
-            founded.setManufacturer(manufacturer);
-            founded.setPrice(price);
-            founded.setSitsNumber(sitsNumber);
-            delete(founded.getId());
-            create(founded);
+        final Optional<Moto> founded = findById(id).or(()->Optional.empty());
+        if (founded.isPresent()) {
+            founded.get().setModel(model);
+            founded.get().setManufacturer(manufacturer);
+            founded.get().setPrice(price);
+            founded.get().setSitsNumber(sitsNumber);
+            delete(founded.get().getId());
+            create(founded.get());
             return true;
         }
         return false;
@@ -64,6 +71,14 @@ public class MotoRepository {
             }
         }
         return false;
+    }
+
+    public List<String> findAllBySpecificManufacturer(){
+        List<String> specificMotoID = new ArrayList<>();
+        for (Moto atv : motos) {
+            specificMotoID.add(atv.getId());
+        }
+        return specificMotoID;
     }
 
 }
