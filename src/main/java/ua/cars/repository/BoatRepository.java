@@ -1,9 +1,7 @@
 package ua.cars.repository;
 
 import ua.cars.entity.Boat;
-import ua.cars.entity.Car;
 import ua.cars.entity.Manufacturer;
-import ua.cars.entity.Moto;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
@@ -11,14 +9,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BoatRepository {
-    private final List<Boat> Boats;
+    private final List<Boat> boats;
 
     public BoatRepository() {
-        Boats = new LinkedList<>();
+        boats = new LinkedList<>();
     }
 
     public Boat getById(String id) {
-        for (Boat boat : Boats) {
+        for (Boat boat : boats) {
             if (boat.getId().equals(id)) {
                 return boat;
             }
@@ -28,12 +26,15 @@ public class BoatRepository {
 
 
     public List<Boat> getAll() {
-        return Boats;
+        return boats;
     }
 
 
     public boolean create(Boat boat) {
-        Boats.add(boat);
+        if (boat == null) {
+            throw new IllegalArgumentException("Boat can not be null");
+        }
+        boats.add(boat);
         return true;
     }
 
@@ -54,7 +55,7 @@ public class BoatRepository {
 
 
     public boolean delete(String id) {
-        final Iterator<Boat> iterator = Boats.iterator();
+        final Iterator<Boat> iterator = boats.iterator();
         while (iterator.hasNext()) {
             final Boat boat = iterator.next();
             if (boat.getId().equals(id)) {
@@ -63,12 +64,5 @@ public class BoatRepository {
             }
         }
         return false;
-    }
-
-    private static void copy(final Boat from, final Boat to) {
-        to.setManufacturer(from.getManufacturer());
-        to.setModel(from.getModel());
-        to.setCubicCapacity(from.getCubicCapacity());
-        to.setPrice(from.getPrice());
     }
 }
