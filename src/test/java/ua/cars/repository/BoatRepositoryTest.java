@@ -28,15 +28,9 @@ class BoatRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final Boat actual = target.getById(boat.getId());
+        final Boat actual = target.findById(boat.getId()).get();
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(boat.getId(),actual.getId());
-    }
-
-    @Test
-    void getById_notFound() {
-        final Boat actual = target.getById("someId");
-        Assertions.assertNull(actual);
     }
 
     @Test
@@ -52,12 +46,6 @@ class BoatRepositoryTest {
     }
 
     @Test
-    void create_successSave() {
-        final boolean actual = target.create(boat);
-        Assertions.assertTrue(actual);
-    }
-
-    @Test
     void update_notFoundAuto() {
         final Boat someBoat = createDefaultBoat();
         final boolean actual = target.update(someBoat.getId(),someBoat.getModel(),someBoat.getManufacturer(),someBoat.getPrice(),someBoat.getCubicCapacity());
@@ -69,7 +57,7 @@ class BoatRepositoryTest {
         boat.setPrice(BigDecimal.TEN);
         final  boolean actual = target.update(boat.getId(),boat.getModel(),boat.getManufacturer(),boat.getPrice(),boat.getCubicCapacity());
         Assertions.assertTrue(actual);
-        final Boat actualBoat = target.getById(boat.getId());
+        final Boat actualBoat = target.findById(boat.getId()).get();
         Assertions.assertEquals(BigDecimal.TEN,actualBoat.getPrice());
     }
 

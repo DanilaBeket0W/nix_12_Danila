@@ -28,15 +28,9 @@ class CarRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final Car actual = target.getById(car.getId());
+        final Car actual = target.findById(car.getId()).get();
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(car.getId(),actual.getId());
-    }
-
-    @Test
-    void getById_notFound() {
-        final Car actual = target.getById("someId");
-        Assertions.assertNull(actual);
     }
 
     @Test
@@ -52,12 +46,6 @@ class CarRepositoryTest {
     }
 
     @Test
-    void create_successSave() {
-        final boolean actual = target.create(car);
-        Assertions.assertTrue(actual);
-    }
-
-    @Test
     void update_notFoundAuto() {
         final Car someAuto = createDefaultAuto();
         final boolean actual = target.update(someAuto.getId(),someAuto.getModel(),someAuto.getManufacturer(),someAuto.getPrice(),someAuto.getBodyType());
@@ -65,11 +53,11 @@ class CarRepositoryTest {
     }
 
     @Test
-    void update_succesfullUpdate() {
+    void update() {
         car.setPrice(BigDecimal.TEN);
         final  boolean actual = target.update(car.getId(),car.getModel(),car.getManufacturer(),car.getPrice(),car.getBodyType());
         Assertions.assertTrue(actual);
-        final Car actualAuto = target.getById(car.getId());
+        final Car actualAuto = target.findById(car.getId()).get();
         Assertions.assertEquals(BigDecimal.TEN,actualAuto.getPrice());
     }
 

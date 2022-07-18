@@ -12,44 +12,24 @@ import ua.cars.repository.CarRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CarServiceTest {
 
-    private Car createDefaultAuto() {
-        return new Car("Model", Manufacturer.HONDA, BigDecimal.ZERO,"Type");
-    }
     private CarService target;
     private CarRepository carRepository;
+    private static Car createDefaultAuto() {
+        return new Car("NONE", Manufacturer.NONE, BigDecimal.ZERO, "NONE");
+    }
 
     @BeforeEach
     void setUp() {
         carRepository = mock(CarRepository.class);
         target = new CarService(carRepository);
-    }
-
-    @Test
-    void create() {
-        target.create(createDefaultAuto());
-        Mockito.verify(carRepository).create(Mockito.any());
-    }
-
-    @Test
-    void create_checkArg() {
-        final CarRepository carRepository = mock(CarRepository.class);
-        when(carRepository.create(argThat(new ArgumentMatcher<Car>() {
-            @Override
-            public boolean matches(final Car car) {
-                assertEquals("someModel",((Car)car).getModel());
-                return true;
-            }
-        }))).thenReturn(Boolean.TRUE);
-        final Car car = createDefaultAuto();
-        car.setModel("someModel");
-        carRepository.create(car);
     }
 
     @Test
@@ -61,27 +41,53 @@ class CarServiceTest {
     }
 
     @Test
+    void create() {
+        final Car defaultAuto = createDefaultAuto();
+        target.create(defaultAuto);
+        Mockito.verify(carRepository).create(defaultAuto);
+    }
+
+    @Test
+    void create_checkArg() {
+        final Car car = createDefaultAuto();
+
+        when(carRepository.create(argThat(new ArgumentMatcher<Car>() {
+            @Override
+            public boolean matches(final Car auto) {
+                return car.getModel().equals(auto.getModel());
+            }
+        }))).thenReturn(Optional.of(car));
+        target.create(car);
+        Mockito.verify(carRepository).create(car);
+    }
+
+    @Test
     void update() {
         Assertions.assertThrows(IllegalArgumentException.class, ()->target.update("","",Manufacturer.NONE,BigDecimal.ZERO,""));
     }
 
     @Test
     void delete() {
-        CarRepository repMock = mock(CarRepository.class);
-        try{Mockito.doThrow(new IllegalArgumentException("Error occurred"))
-                .when(repMock)
-                .delete("");
-        repMock.delete("");}catch (Exception e){
-            System.out.println("id can not be empty");
-        }
+        final Car defaultAuto = createDefaultAuto();
+        target.delete(defaultAuto.getId());
+        Mockito.verify(carRepository).delete(defaultAuto.getId());
     }
 
     @Test
-    void findByid_getNull() {
+    void findById() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        target.findByid(null);
-        Mockito.verify(carRepository).getById(captor.capture());
+        target.findById("");
+        Mockito.verify(carRepository).findById(captor.capture());
         Assertions.assertEquals("",captor.getValue());
+    }
+
+    @Test
+    void findByModel() {
+        CarService repMock = mock(CarService.class);
+        Mockito.doThrow(new IllegalArgumentException("Error occurred"))
+                .when(repMock)
+                .findByModel("");
+        repMock.findByModel("");
     }
 
     @Test
@@ -90,4 +96,21 @@ class CarServiceTest {
         Mockito.when(carRepository.getAll()).thenReturn(cars);
         target.findALL();
     }
+
+    @Test
+    void findAllBySpecificManufacturer_getNoneManufacturer() {
+        CarService repMock = mock(CarService.class);
+        Mockito.doThrow(new IllegalArgumentException("Invalid Manufacturer"))
+                .when(repMock)
+                .findAllBySpecificManufacturer(Manufacturer.NONE);
+        repMock.findAllBySpecificManufacturer(Manufacturer.NONE);
+    }
+
+    @Test
+    void findAllBySpecificManufacturer_callMethod() {
+        final Car defaultAuto = createDefaultAuto();
+        target.findAllBySpecificManufacturer(defaultAuto.getManufacturer());
+        Mockito.verify(carRepository).findAllBySpecificManufacturer();
+    }
 }
+

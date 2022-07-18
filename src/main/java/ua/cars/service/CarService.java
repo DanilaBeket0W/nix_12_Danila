@@ -5,9 +5,7 @@ import ua.cars.entity.Manufacturer;
 import ua.cars.repository.CarRepository;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +40,14 @@ public class CarService {
     }
 
     public void create(Car car){
-        carRepository.create(car);
-        LOGGER.debug("Created auto {}", car.getId());
+        final Car added = carRepository.create(car).orElse(createDefaultAuto());
+        System.out.println();
+        LOGGER.debug("Created auto {}", added.getId());
+        if(added.getManufacturer() != Manufacturer.NONE) {
+            System.out.println("Your car creaed\uD83D\uDC4D");
+        }else {
+            System.out.println("Your car is invalid\uD83D\uDC4E");
+        }
     }
 
     public void update(String id, String model, Manufacturer manufacturer, BigDecimal price, String bodyType){
@@ -52,18 +56,60 @@ public class CarService {
         }
         carRepository.update(id, model, manufacturer, price, bodyType);
     }
+
     public void delete(String id){
         carRepository.delete(id);
         LOGGER.debug("Deleted auto {}", id);
     }
-    public Car findByid(String id){
-        if(id == null){
-            return carRepository.getById("");
-        }else {
-            return carRepository.getById(id);
+
+public Optional<Car> findById(String id){
+    Optional<Car> actual = carRepository.findById(id);
+    try {
+        return actual.map(auto -> {
+            Optional<Car> car = actual;
+            return car;
+        }).orElseThrow(() -> new IllegalArgumentException("Cannot find auto with id " + id));
+    }catch (Exception e){
+        System.out.println(e.getMessage());
+    }
+    return Optional.empty();
+}
+
+    public void findByModel(String model) {
+        if (!Objects.equals(model, "")){
+            carRepository.findByModel(model).ifPresentOrElse(
+                auto -> {
+                    System.out.println(auto.getModel());
+                },
+                () -> {
+                    System.out.println("Cannot find auto " + model);
+                }
+            );
+        }else{
+            System.out.println("Autos id can`t be empty");
         }
     }
+
     public List<Car> findALL(){
         return carRepository.getAll();
+    }
+
+    public List<Car> findAllBySpecificManufacturer(Manufacturer manufacturer){
+        List<String> specificCarsID = carRepository.findAllBySpecificManufacturer();
+        List<Car>specificCars = new ArrayList<>();
+        if (specificCarsID.size()>0) {
+            for (String ID : specificCarsID) {
+                carRepository.findById(ID)
+                        .filter(auto -> auto.getManufacturer().equals(manufacturer))
+                        .ifPresent(auto -> {
+                            specificCars.add(auto);
+                        });
+            }
+        }
+        return specificCars;
+    }
+
+    private Car createDefaultAuto() {
+        return new Car("NONE", Manufacturer.NONE, BigDecimal.ZERO,"NONE");
     }
 }

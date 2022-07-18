@@ -28,15 +28,9 @@ class MotoRepositoryTest {
 
     @Test
     void getById_findOne() {
-        final Moto actual = target.getById(moto.getId());
+        final Moto actual = target.findById(moto.getId()).get();
         Assertions.assertNotNull(actual);
         Assertions.assertEquals(moto.getId(),actual.getId());
-    }
-
-    @Test
-    void getById_notFound() {
-        final Moto actual = target.getById("someId");
-        Assertions.assertNull(actual);
     }
 
     @Test
@@ -52,12 +46,6 @@ class MotoRepositoryTest {
     }
 
     @Test
-    void create_successSave() {
-        final boolean actual = target.create(moto);
-        Assertions.assertTrue(actual);
-    }
-
-    @Test
     void update_notFoundAuto() {
         final Moto someMoto = createDefaultMoto();
         final boolean actual = target.update(someMoto.getId(),someMoto.getModel(),someMoto.getManufacturer(),someMoto.getPrice(),someMoto.getSitsNumber());
@@ -65,11 +53,11 @@ class MotoRepositoryTest {
     }
 
     @Test
-    void update_succesfullUpdate() {
+    void update() {
         moto.setPrice(BigDecimal.TEN);
         final  boolean actual = target.update(moto.getId(),moto.getModel(),moto.getManufacturer(),moto.getPrice(),moto.getSitsNumber());
         Assertions.assertTrue(actual);
-        final Moto actualAuto = target.getById(moto.getId());
+        final Moto actualAuto = target.findById(moto.getId()).get();
         Assertions.assertEquals(BigDecimal.TEN,actualAuto.getPrice());
     }
 

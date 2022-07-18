@@ -4,9 +4,7 @@ import ua.cars.entity.Car;
 import ua.cars.entity.Manufacturer;
 
 import java.math.BigDecimal;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CarRepository {
     private final List<Car> cars;
@@ -15,49 +13,50 @@ public class CarRepository {
         cars = new LinkedList<>();
     }
 
-
-    public Car getById(String id) {
+    public Optional<Car> findById(String id) {
         for (Car auto : cars) {
             if (auto.getId().equals(id)) {
-                return auto;
+                return Optional.of(auto);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
+    public Optional<Car> findByModel (String model){
+        for (Car auto : cars) {
+            if (auto.getModel().equals(model)) {
+                return Optional.of(auto);
+            }
+        }
+        return Optional.empty();
+    }
 
     public List<Car> getAll() {
         return cars;
     }
 
 
-    public boolean create(Car auto) {
+    public Optional<Car> create(Car auto) {
         if (auto == null) {
             throw new IllegalArgumentException("Auto can not be null");
         }
         cars.add(auto);
-        return true;
+        return Optional.of(auto);
     }
 
-//    @Override
-//    public boolean create(List<Car> auto) {  //не нашлось применения :)
-//        return false;
-//    }
-
-
-public boolean update(String id, String model, Manufacturer manufacturer, BigDecimal price, String bodyType) {
-    final Car founded = getById(id);
-    if (founded != null) {
-        founded.setModel(model);
-        founded.setManufacturer(manufacturer);
-        founded.setPrice(price);
-        founded.setBodyType(bodyType);
-        delete(founded.getId());
-        create(founded);
-        return true;
+    public boolean update(String id, String model, Manufacturer manufacturer, BigDecimal price, String bodyType) {
+      final Optional<Car> founded = findById(id).or(()->Optional.empty());
+         if (founded.isPresent()) {
+            founded.get().setModel(model);
+            founded.get().setManufacturer(manufacturer);
+            founded.get().setPrice(price);
+            founded.get().setBodyType(bodyType);
+            delete(founded.get().getId());
+            create(founded.get());
+            return true;
+        }
+         return false;
     }
-    return false;
-}
 
     public boolean delete(String id) {
         final Iterator<Car> iterator = cars.iterator();
@@ -69,6 +68,14 @@ public boolean update(String id, String model, Manufacturer manufacturer, BigDec
             }
         }
         return false;
+    }
+
+    public List<String> findAllBySpecificManufacturer(){
+        List<String> specificCarsID = new ArrayList<>();
+        for (Car auto : cars) {
+            specificCarsID.add(auto.getId());
+        }
+        return specificCarsID;
     }
 
 }

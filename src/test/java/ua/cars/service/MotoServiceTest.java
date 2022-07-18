@@ -8,23 +8,23 @@ import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
 import ua.cars.entity.Manufacturer;
 import ua.cars.entity.Moto;
-import ua.cars.repository.CarRepository;
 import ua.cars.repository.MotoRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class MotoServiceTest {
-    private Moto createDefaultMoto() {
-        return new Moto("Model", Manufacturer.HONDA, BigDecimal.ZERO,2);
-    }
+
     private MotoService target;
     private MotoRepository motoRepository;
+    private static Moto createDefaultMoto() {
+        return new Moto("NONE", Manufacturer.NONE, BigDecimal.ZERO,0);
+    }
 
     @BeforeEach
     void setUp() {
@@ -34,53 +34,74 @@ class MotoServiceTest {
 
     @Test
     void create() {
-        target.create(createDefaultMoto());
-        Mockito.verify(motoRepository).create(Mockito.any());
+        final Moto defaultMoto = createDefaultMoto();
+        target.create(defaultMoto);
+        Mockito.verify(motoRepository).create(defaultMoto);
     }
 
     @Test
     void create_checkArg() {
-        final MotoRepository motoRepository = mock(MotoRepository.class);
+        final Moto atv = createDefaultMoto();
         when(motoRepository.create(argThat(new ArgumentMatcher<Moto>() {
             @Override
             public boolean matches(final Moto moto) {
-                assertEquals("someModel",((Moto)moto).getModel());
-                return true;
+                return atv.getModel().equals(moto.getModel());
             }
-        }))).thenReturn(Boolean.TRUE);
-        final Moto moto = createDefaultMoto();
-        moto.setModel("someModel");
-        motoRepository.create(moto);
+        }))).thenReturn(Optional.of(atv));
+        target.create(atv);
+        Mockito.verify(motoRepository).create(atv);
     }
 
     @Test
     void update() {
         Assertions.assertThrows(IllegalArgumentException.class, ()->target.update("","",Manufacturer.NONE,BigDecimal.ZERO,0));
+
     }
 
     @Test
     void delete() {
-        CarRepository repMock = mock(CarRepository.class);
-        try{Mockito.doThrow(new IllegalArgumentException("Error occurred"))
-                .when(repMock)
-                .delete("");
-            repMock.delete("");}catch (Exception e){
-            System.out.println("id can not be empty");
-        }
+        final Moto defaultMoto = createDefaultMoto();
+        target.delete(defaultMoto.getId());
+        Mockito.verify(motoRepository).delete(defaultMoto.getId());
     }
 
     @Test
-    void findByid_getNull() {
+    void findById() {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        target.findByid(null);
-        Mockito.verify(motoRepository).getById(captor.capture());
+        target.findById("");
+        Mockito.verify(motoRepository).findById(captor.capture());
         Assertions.assertEquals("",captor.getValue());
     }
 
     @Test
+    void findByModel() {
+        MotoService repMock = mock(MotoService.class);
+        Mockito.doThrow(new IllegalArgumentException("Error occurred"))
+                .when(repMock)
+                .findByModel("");
+        repMock.findByModel("");
+    }
+
+    @Test
     void findALL() {
-        List<Moto> motos = List.of(createDefaultMoto(),createDefaultMoto());
-        Mockito.when(motoRepository.getAll()).thenReturn(motos);
+        List<Moto> atvs = List.of(createDefaultMoto(),createDefaultMoto());
+        Mockito.when(motoRepository.getAll()).thenReturn(atvs);
         target.findALL();
+    }
+
+    @Test
+    void findAllBySpecificManufacturer_getNoneManufacturer() {
+        MotoService repMock = mock(MotoService.class);
+        Mockito.doThrow(new IllegalArgumentException("Invalid Manufacturer"))
+                .when(repMock)
+                .findAllBySpecificManufacturer(Manufacturer.NONE);
+        repMock.findAllBySpecificManufacturer(Manufacturer.NONE);
+    }
+
+    @Test
+    void findAllBySpecificManufacturer() {
+        final Moto defaultMoto = createDefaultMoto();
+        target.findAllBySpecificManufacturer(defaultMoto.getManufacturer());
+        Mockito.verify(motoRepository).findAllBySpecificManufacturer();
     }
 }
