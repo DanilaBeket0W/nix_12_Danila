@@ -48,14 +48,14 @@ class CarRepositoryTest {
     @Test
     void update_notFoundAuto() {
         final Car someAuto = createDefaultAuto();
-        final boolean actual = target.update(someAuto.getId(),someAuto.getModel(),someAuto.getManufacturer(),someAuto.getPrice(),someAuto.getBodyType());
+        final boolean actual = target.update(someAuto.getId(),someAuto);
         Assertions.assertFalse(actual);
     }
 
     @Test
     void update() {
         car.setPrice(BigDecimal.TEN);
-        final  boolean actual = target.update(car.getId(),car.getModel(),car.getManufacturer(),car.getPrice(),car.getBodyType());
+        final  boolean actual = target.update(car.getId(),car);
         Assertions.assertTrue(actual);
         final Car actualAuto = target.findById(car.getId()).get();
         Assertions.assertEquals(BigDecimal.TEN,actualAuto.getPrice());

@@ -43,7 +43,7 @@ public class UIrun {
 
 
     private static void navigation(BufferedReader reader) throws IOException {
-        System.out.println("Choose an action:\n1 - add transport\n2 - update transport\n3 - delete transport\n4 - find transport by id\n5 - show all transport\n6 - find all transport by specific manufacturer\n7 - find transport by model\n0 - to exit\n");
+        System.out.println("Choose an action:\n1 - add transport\n2 - update transport\n3 - delete transport\n4 - find transport by id\n5 - show all transport\n0 - to exit\n");
         String line = reader.readLine();
         switch (line) {
             case "0" -> System.exit(0);
@@ -52,8 +52,6 @@ public class UIrun {
             case "3" -> delete(reader);
             case "4" -> findById(reader);
             case "5" -> findALL();
-            case "6" -> findAllBySpecificManufacturer();
-            case "7" -> findByModel(reader);
             default -> System.out.println("Choose 0-5");
         }
     }
@@ -97,7 +95,7 @@ public class UIrun {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            carService.update(id, updatedCar.getModel(), updatedCar.getManufacturer(), updatedCar.getPrice(), updatedCar.getBodyType());
+            carService.update(id, updatedCar);
         });
         Optional<Moto> atv = motoService.findById(id);
         atv.ifPresent(moto -> {
@@ -108,7 +106,7 @@ public class UIrun {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            motoService.update(id, updatedMoto.getModel(), updatedMoto.getManufacturer(), updatedMoto.getPrice(), updatedMoto.getSitsNumber());
+            motoService.update(id, updatedMoto);
         });
         Optional<Boat> boat = boatService.findById(id);
         boat.ifPresent(kater -> {
@@ -119,7 +117,7 @@ public class UIrun {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            boatService.update(id, updatedBoat.getModel(), updatedBoat.getManufacturer(), updatedBoat.getPrice(), updatedBoat.getCubicCapacity());
+            boatService.update(id, updatedBoat);
         });
         System.out.println("\nTransport with this id updated.");
     }
@@ -136,25 +134,16 @@ public class UIrun {
     private static void findById(BufferedReader reader) throws IOException {
         System.out.println("\nInput id to search please:");
         String id = reader.readLine();
-        Car car = carService.findById(id).orElseGet(() -> {
-            System.out.println("Database don`t exist auto with id " + id);
-            return createDefaultAuto();
-        });
-        if (!car.equals(createDefaultAuto())) {
+        Car car = carService.findById(id).orElseGet(UIrun::createDefaultAuto);
+        if (!car.getModel().equals(createDefaultAuto().getModel())) {
             System.out.println(car);
         }
-        Moto atv = motoService.findById(id).orElseGet(() -> {
-            System.out.println("Database don`t exist atv with id " + id);
-            return createDefaultMoto();
-        });
-        if (!atv.equals(createDefaultMoto())) {
+        Moto atv = motoService.findById(id).orElseGet(UIrun::createDefaultMoto);
+        if (!atv.getModel().equals(createDefaultMoto().getModel())) {
             System.out.println(atv);
         }
-        Boat boat = boatService.findById(id).orElseGet(() -> {
-            System.out.println("Database don`t exist boat with id " + id);
-            return createDefaultBoat();
-        });
-        if (!boat.equals(createDefaultBoat())) {
+        Boat boat = boatService.findById(id).orElseGet(UIrun::createDefaultBoat);
+        if (!boat.getModel().equals(createDefaultBoat().getModel())) {
             System.out.println(boat);
         }
     }
@@ -169,37 +158,6 @@ public class UIrun {
         for (Boat boat : boatService.findALL()) {
             System.out.println(boat);
         }
-    }
-
-    private static void findAllBySpecificManufacturer() {
-        Scanner in = new Scanner(System.in);
-        System.out.println("\nСhoose the car manufacturer from below (0-3): ");
-        System.out.println(valuesList);
-        int index = in.nextInt();
-        Manufacturer manufacturer = valuesList.get(index);
-        List<Car> carList = carService.findAllBySpecificManufacturer(manufacturer);
-        if (carList.size() > 0) {
-            System.out.println(carList);
-        }
-        List<Moto> atvList = motoService.findAllBySpecificManufacturer(manufacturer);
-        if (atvList.size() > 0) {
-            System.out.println(atvList);
-        }
-        List<Boat> boatList = boatService.findAllBySpecificManufacturer(manufacturer);
-        if (boatList.size() > 0) {
-            System.out.println(boatList);
-        }
-        if (carList.size() < 0 && boatList.size() < 0 && atvList.size() < 0) {
-            System.out.println("Can`t to find transport with manufacturer " + manufacturer);
-        }
-    }
-
-    private static void findByModel(BufferedReader reader) throws IOException {
-        System.out.println("\nInput model: ");
-        String model = (reader.readLine()).toUpperCase();
-        carService.findByModel(model);
-        motoService.findByModel(model);
-        boatService.findByModel(model);
     }
 
     private static Car createDefaultAuto() {
