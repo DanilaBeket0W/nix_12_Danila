@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mockito;
-import ua.cars.entity.Car;
-import ua.cars.entity.Manufacturer;
+import ua.cars.entity.vehicle.Car;
+import ua.cars.entity.vehicle.Manufacturer;
 import ua.cars.repository.CarRepository;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ class BaseServiceTest {
     private CarRepository repository;
     Car auto;
     private static Car createDefaultAuto() {
-        return new Car("NONE", Manufacturer.NONE, BigDecimal.ZERO, "NONE");
+        return new Car("NONE", Manufacturer.NONE, BigDecimal.ZERO, "NONE",100);
     }
 
     @BeforeEach

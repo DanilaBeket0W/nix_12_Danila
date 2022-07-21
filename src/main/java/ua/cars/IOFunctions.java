@@ -1,9 +1,9 @@
 package ua.cars;
 
-import ua.cars.entity.Boat;
-import ua.cars.entity.Car;
-import ua.cars.entity.Manufacturer;
-import ua.cars.entity.Moto;
+import ua.cars.entity.vehicle.Boat;
+import ua.cars.entity.vehicle.Car;
+import ua.cars.entity.vehicle.Manufacturer;
+import ua.cars.entity.vehicle.Moto;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class IOFunctions {
         BigDecimal price = in.nextBigDecimal();
         System.out.println("\nInput bodytype: ");
         String bodyType = (reader.readLine());
-        Car car = new Car(model, manufacturer, price, bodyType);
+        Car car = new Car(model, manufacturer, price, bodyType,100);
         return car;
     }
     public Moto createMotoInput (BufferedReader reader) throws IOException {
@@ -43,7 +43,7 @@ public class IOFunctions {
         BigDecimal price = in.nextBigDecimal();
         System.out.println("\nInput number of sits: ");
         int sitsNumber = in.nextInt();
-        Moto moto = new Moto(model, manufacturer, price, sitsNumber);
+        Moto moto = new Moto(model, manufacturer, price, sitsNumber,100);
         return moto;
     }
     public Boat createBoatInput (BufferedReader reader) throws IOException {
@@ -58,7 +58,7 @@ public class IOFunctions {
         BigDecimal price = in.nextBigDecimal();
         System.out.println("\nInput engine cubic capacity: ");
         BigDecimal cubicCapacity = in.nextBigDecimal();
-        Boat boat = new Boat(model, manufacturer, price, cubicCapacity);
+        Boat boat = new Boat(model, manufacturer, price, cubicCapacity,100);
         return boat;
     }
 
@@ -74,7 +74,7 @@ public class IOFunctions {
         BigDecimal price = in.nextBigDecimal();
         System.out.println("\nInput bodytype: ");
         String bodyType = (reader.readLine());
-        Car car = new Car(id, model, manufacturer, price, bodyType);
+        Car car = new Car(id, model, manufacturer, price, bodyType,100);
         return car;
     }
     public Moto updateMotoInput (BufferedReader reader, String id) throws IOException {
@@ -89,7 +89,7 @@ public class IOFunctions {
         BigDecimal price = in.nextBigDecimal();
         System.out.println("\nInput number of sits: ");
         int sitsNumber = in.nextInt();
-        Moto moto = new Moto(id, model, manufacturer, price, sitsNumber);
+        Moto moto = new Moto(id, model, manufacturer, price, sitsNumber,100);
         return moto;
     }
     public Boat updateBoatInput (BufferedReader reader, String id) throws IOException {
@@ -104,7 +104,7 @@ public class IOFunctions {
         BigDecimal price = in.nextBigDecimal();
         System.out.println("\nInput engine cubic capacity: ");
         BigDecimal cubicCapacity = in.nextBigDecimal();
-        Boat boat = new Boat(id, model, manufacturer, price, cubicCapacity);
+        Boat boat = new Boat(id, model, manufacturer, price, cubicCapacity,100);
         return boat;
     }
 }

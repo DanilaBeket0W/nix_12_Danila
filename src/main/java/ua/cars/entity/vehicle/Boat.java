@@ -1,4 +1,4 @@
-package ua.cars.entity;
+package ua.cars.entity.vehicle;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +12,12 @@ public class Boat extends Vehicle{
 
     private BigDecimal cubicCapacity;
 
-    public Boat(String model, Manufacturer manufacturer, BigDecimal price, BigDecimal cubicCapacity) {
-        super(model, manufacturer, price);
+    public Boat(String model, Manufacturer manufacturer, BigDecimal price, BigDecimal cubicCapacity, int count) {
+        super(model, manufacturer, price, count);
         this.cubicCapacity = cubicCapacity;
     }
-    public Boat(String id, String model, Manufacturer manufacturer, BigDecimal price, BigDecimal cubicCapacity) {
-        super(model, manufacturer, price);
+    public Boat(String id, String model, Manufacturer manufacturer, BigDecimal price, BigDecimal cubicCapacity, int count) {
+        super(model, manufacturer, price , count);
         this.cubicCapacity = cubicCapacity;
     }
 

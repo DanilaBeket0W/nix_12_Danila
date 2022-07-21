@@ -1,6 +1,6 @@
 package ua.cars.service;
 
-import ua.cars.entity.Car;
+import ua.cars.entity.vehicle.Car;
 import ua.cars.repository.BaseRepository;
 
 

@@ -2,8 +2,8 @@ package ua.cars.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ua.cars.entity.Manufacturer;
-import ua.cars.entity.Vehicle;
+import ua.cars.entity.vehicle.Manufacturer;
+import ua.cars.entity.vehicle.Vehicle;
 import ua.cars.repository.BaseRepository;
 
 import java.util.List;

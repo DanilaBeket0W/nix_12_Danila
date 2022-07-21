@@ -1,4 +1,4 @@
-package ua.cars.entity;
+package ua.cars.entity.vehicle;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,11 +13,13 @@ public abstract class Vehicle {
     protected String model;
     protected BigDecimal price;
     protected Manufacturer manufacturer;
+    protected int count;
 
-    protected Vehicle(String model, Manufacturer manufacturer, BigDecimal price) {
+    protected Vehicle(String model, Manufacturer manufacturer, BigDecimal price, int count) {
         this.id = UUID.randomUUID().toString();
         this.model = model;
         this.manufacturer = manufacturer;
         this.price = price;
+        this.count = count;
     }
 }

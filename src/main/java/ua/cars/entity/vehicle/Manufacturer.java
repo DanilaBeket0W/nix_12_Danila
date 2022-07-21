@@ -1,4 +1,4 @@
-package ua.cars.entity;
+package ua.cars.entity.vehicle;
 
 public enum Manufacturer {
     BMW, MERCEDES, HONDA, TOYOTA, NONE

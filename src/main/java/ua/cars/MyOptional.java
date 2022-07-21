@@ -1,6 +1,6 @@
 package ua.cars;
 
-import ua.cars.entity.Vehicle;
+import ua.cars.entity.vehicle.Vehicle;
 
 import java.math.BigDecimal;
 
