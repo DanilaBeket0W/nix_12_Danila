@@ -20,10 +20,4 @@ public abstract class Vehicle {
         this.manufacturer = manufacturer;
         this.price = price;
     }
-//    protected Vehicle(String id, String model, Manufacturer manufacturer, BigDecimal price) {
-//        this.id = id;
-//        this.model = model;
-//        this.manufacturer = manufacturer;
-//        this.price = price;
-//    }
 }
