@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class TransportGarage<T extends Vehicle> {
+public class LinkedTransportGarage<T extends Vehicle> {
 
     private int restNumber = 0; // Количество рестайлингов (+1 рестайлинг если пользователь решает изменить параметри транспорта при помощи метода set())
     private Instant timeFirstCarADD;// Системное время добавления пераого транспорта в коллекцию, записывается один раз после чего не изменячется
