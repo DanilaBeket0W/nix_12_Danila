@@ -1,6 +1,6 @@
 package ua.cars.repository;
 
-import ua.cars.entity.Vehicle;
+import ua.cars.entity.vehicle.Vehicle;
 
 import java.util.List;
 import java.util.Optional;

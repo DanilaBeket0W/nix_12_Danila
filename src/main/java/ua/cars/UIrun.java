@@ -1,10 +1,10 @@
 package ua.cars;
 
 
-import ua.cars.entity.Boat;
-import ua.cars.entity.Car;
-import ua.cars.entity.Manufacturer;
-import ua.cars.entity.Moto;
+import ua.cars.entity.vehicle.Boat;
+import ua.cars.entity.vehicle.Car;
+import ua.cars.entity.vehicle.Manufacturer;
+import ua.cars.entity.vehicle.Moto;
 import ua.cars.repository.BoatRepository;
 import ua.cars.repository.CarRepository;
 import ua.cars.repository.MotoRepository;
@@ -18,7 +18,6 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.Scanner;
 
 
 public class UIrun {
@@ -161,15 +160,15 @@ public class UIrun {
     }
 
     private static Car createDefaultAuto() {
-        return new Car("NONE", Manufacturer.NONE, BigDecimal.ZERO, "NONE");
+        return new Car("NONE", Manufacturer.NONE, BigDecimal.ZERO, "NONE",100);
     }
 
     private static Moto createDefaultMoto() {
-        return new Moto("NONE", Manufacturer.NONE, BigDecimal.ZERO, 0);
+        return new Moto("NONE", Manufacturer.NONE, BigDecimal.ZERO, 0,100);
     }
 
     private static Boat createDefaultBoat() {
-        return new Boat("NONE", Manufacturer.NONE, BigDecimal.ZERO, BigDecimal.valueOf(1000));
+        return new Boat("NONE", Manufacturer.NONE, BigDecimal.ZERO, BigDecimal.valueOf(1000),100);
     }
 
 

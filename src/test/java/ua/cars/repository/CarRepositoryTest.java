@@ -3,8 +3,8 @@ package ua.cars.repository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ua.cars.entity.Car;
-import ua.cars.entity.Manufacturer;
+import ua.cars.entity.vehicle.Car;
+import ua.cars.entity.vehicle.Manufacturer;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +16,7 @@ class CarRepositoryTest {
     private Car car;
 
     private Car createDefaultAuto() {
-        return new Car("Model", Manufacturer.HONDA, BigDecimal.ZERO,"Type");
+        return new Car("Model", Manufacturer.HONDA, BigDecimal.ZERO,"Type",100);
     }
 
     @BeforeEach
