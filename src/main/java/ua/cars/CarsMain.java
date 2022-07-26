@@ -20,6 +20,8 @@ public class CarsMain {
         Car car1 = new Car("first", Manufacturer.BMW, BigDecimal.valueOf(15000), "first", 1000);
         Car car2 = new Car("second", Manufacturer.BMW, BigDecimal.valueOf(13000), "second", 100);
         Car car3 = new Car("third", Manufacturer.BMW, BigDecimal.valueOf(1000), "third", 1);
+        Car car4 = new Car("fourth", Manufacturer.BMW, BigDecimal.valueOf(50000), "fourth", 100000);
+        Car car5 = new Car("fifth", Manufacturer.BMW, BigDecimal.valueOf(1), "fifth", 0);
 
 
         //TEST MY TREE
@@ -28,7 +30,11 @@ public class CarsMain {
         myTree.insertNode(car1);
         myTree.insertNode(car2);
         myTree.insertNode(car3);
+        myTree.insertNode(car4);
+        myTree.insertNode(car5);
         myTree.printTree();
+        System.out.println(myTree.rightBranchPriceCount());
+        System.out.println(myTree.leftBranchPriceCount());
         myTree.deleteNode(car3);
         myTree.printTree();
         Optional<Node> foundNode = myTree.findNodeByValue(car);
